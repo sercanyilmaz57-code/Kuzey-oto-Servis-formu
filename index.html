@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuzey Oto — Servis Talep Formu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: { extend: {
+    colors: {
+      navy: {50:'#F3F6FA',100:'#E2EAF3',200:'#C5D5E8',300:'#9FB6D1',500:'#1E3A5F',600:'#18304F',700:'#142B4F',800:'#0F2140',900:'#0A1A33'},
+      gold: {50:'#FDF8EE',100:'#FAEDD1',200:'#F5DCA3',400:'#E8B04B',500:'#D99A2B',600:'#BF841E',700:'#9C6916'}
+    },
+    fontFamily: { sans: ['Inter','system-ui','sans-serif'] }
+  }}
+}
+</script>
+<style>
+  body{font-family:'Inter',system-ui,sans-serif}
+  .hero-bg{background:radial-gradient(ellipse at top right, rgba(217,154,43,.14), transparent 55%), linear-gradient(180deg,#0A1A33 0%,#0F2140 100%)}
+  .form-input{transition:border-color .15s, box-shadow .15s}
+  .form-input:focus{outline:none;border-color:#D99A2B;box-shadow:0 0 0 3px rgba(217,154,43,.15)}
+  .btn-gold{background:linear-gradient(135deg,#E8B04B 0%,#D99A2B 60%,#BF841E 100%);transition:all .2s}
+  .btn-gold:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(191,132,30,.35)}
+  .btn-wa{background:#25D366;transition:all .2s}
+  .btn-wa:hover{background:#1FBE5A;transform:translateY(-1px);box-shadow:0 10px 24px -8px rgba(37,211,102,.5)}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+  .animate-in{animation:fadeUp .5s ease-out both}
+  .form-section{padding-top:1.5rem;margin-top:1.5rem;border-top:2px dashed #e2e8f0}
+  .form-section:first-child{padding-top:0;margin-top:0;border-top:0}
+  .plate-input{background:transparent;border:0!important;outline:none!important;width:100%;font:700 22px/1 'Inter',sans-serif;letter-spacing:.08em;text-transform:uppercase}
+  .plate-input::placeholder{color:#94a3b8;letter-spacing:.1em;font-weight:600;font-size:18px}
+  .ms-panel::-webkit-scrollbar{width:6px}
+  .ms-panel::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+  .ms-chevron-open{transform:rotate(180deg)}
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased flex flex-col min-h-screen">
+
+<!-- HEADER -->
+<header class="w-full bg-white border-b border-slate-200">
+  <div class="max-w-4xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-20 lg:h-24 gap-2">
+      <a href="#" class="flex items-center gap-2 sm:gap-3 min-w-0">
+        <img id="brandLogo" src="kuzey-oto-logo.png" alt="Kuzey Oto Logo" class="h-10 sm:h-14 lg:h-16 w-auto object-contain flex-shrink-0" onerror="this.style.display='none';">
+        <div class="flex flex-col min-w-0">
+          <div class="text-lg sm:text-xl lg:text-2xl font-extrabold text-navy-900 tracking-tight leading-none whitespace-nowrap">KUZEY OTO</div>
+          <div class="flex justify-between items-center text-[7px] sm:text-[8px] lg:text-[9px] font-semibold uppercase text-slate-500 mt-1">
+            <span>Bakım</span><span class="text-gold-500">•</span><span>Onarım</span><span class="text-gold-500">•</span><span>Servis</span>
+          </div>
+        </div>
+      </a>
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <button type="button" id="staffLoginBtn" aria-label="Personel Girişi" title="Personel Girişi"
+                class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 rounded-full transition">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+        </button>
+        <button type="button" id="shareBtn" aria-label="WhatsApp'ta Paylaş" title="WhatsApp'ta Paylaş"
+                class="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center bg-[#25D366] hover:bg-[#1FBE5A] active:scale-95 text-white rounded-full transition">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </button>
+        <a id="callBtn" href="#" class="inline-flex items-center gap-1.5 sm:gap-2 btn-gold text-white px-3 sm:px-4 lg:px-5 py-2 sm:py-2.5 rounded-xl font-semibold text-xs sm:text-sm shadow-md">
+          <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          <span class="hidden sm:inline">Hemen Ara</span><span class="sm:hidden">Ara</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main class="flex-1 hero-bg p-4 sm:p-6 lg:p-8">
+  <div class="w-full max-w-3xl mx-auto animate-in">
+
+    <div class="text-center mb-6">
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Servis Talep Formu</h1>
+      <p class="text-sm text-slate-300 mt-2 max-w-xl mx-auto">Araç bilgilerinizi ve şikâyetinizi doldurun. Gönder'e basınca mesaj WhatsApp'ta hazır açılır.</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-2xl shadow-black/30">
+      <form id="serviceForm" class="p-6 sm:p-8 space-y-5" novalidate>
+
+        <!-- MÜŞTERİ -->
+        <div class="form-section">
+          <h2 class="text-lg font-bold text-navy-900 mb-1">Müşteri</h2>
+          <p class="text-xs text-slate-500 mb-3">Size ulaşabileceğimiz bilgiler</p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="name" class="block text-sm font-semibold text-slate-700 mb-1.5">Ad Soyad <span class="text-red-500">*</span></label>
+              <input id="name" required type="text" autocomplete="name" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm" placeholder="Adınız Soyadınız">
+            </div>
+            <div>
+              <label for="phone" class="block text-sm font-semibold text-slate-700 mb-1.5">Telefon</label>
+              <input id="phone" type="tel" inputmode="tel" autocomplete="tel" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm" placeholder="05XX XXX XX XX">
+            </div>
+          </div>
+        </div>
+
+        <!-- ARAÇ BİLGİLERİ -->
+        <div class="form-section">
+          <h2 class="text-lg font-bold text-navy-900 mb-1">Araç Bilgileri</h2>
+          <p class="text-xs text-slate-500 mb-3">Aracınızı tanıyalım</p>
+
+          <div class="mb-3">
+            <label for="plate" class="block text-sm font-semibold text-slate-700 mb-1.5">Plaka <span class="text-slate-400 font-normal">(opsiyonel)</span></label>
+            <div class="flex items-stretch w-full max-w-sm bg-white border-2 border-slate-800 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-gold-500 focus-within:ring-offset-1">
+              <span class="flex items-center justify-center px-3 bg-[#0B3D91] text-white text-xs font-bold tracking-wider">TR</span>
+              <input id="plate" type="text" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false" class="plate-input px-3 py-3" placeholder="34 ABC 123">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label for="brand" class="block text-sm font-semibold text-slate-700 mb-1.5">Marka</label>
+              <select id="brand" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white">
+                <option value="">Marka seçin</option>
+              </select>
+            </div>
+            <div>
+              <label for="model" class="block text-sm font-semibold text-slate-700 mb-1.5">Model</label>
+              <select id="model" disabled class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white disabled:bg-slate-100 disabled:text-slate-400 disabled:cursor-not-allowed">
+                <option value="">Önce marka seçin</option>
+              </select>
+              <input id="modelOther" type="text" hidden class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm" placeholder="Model adını yazın">
+            </div>
+          </div>
+
+          <div id="brandOtherBox" class="mt-3" hidden>
+            <label for="brandOther" class="block text-sm font-semibold text-slate-700 mb-1.5">Marka adı</label>
+            <input id="brandOther" type="text" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm" placeholder="Markayı yazın">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+            <div>
+              <label for="year" class="block text-sm font-semibold text-slate-700 mb-1.5">Model yılı</label>
+              <select id="year" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white">
+                <option value="">Yıl seçin</option>
+              </select>
+            </div>
+            <div>
+              <label for="km" class="block text-sm font-semibold text-slate-700 mb-1.5">Kilometre</label>
+              <input id="km" type="text" inputmode="numeric" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm" placeholder="126.000">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+            <div>
+              <label for="fuel" class="block text-sm font-semibold text-slate-700 mb-1.5">Yakıt tipi</label>
+              <select id="fuel" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white">
+                <option value="">Seçiniz</option>
+              </select>
+            </div>
+            <div>
+              <label for="gear" class="block text-sm font-semibold text-slate-700 mb-1.5">Vites</label>
+              <select id="gear" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white">
+                <option value="">Seçiniz</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- İŞLEMLER -->
+        <div class="form-section">
+          <h2 class="text-lg font-bold text-navy-900 mb-1">Ne Yaptırmak İstiyorsunuz?</h2>
+          <p class="text-xs text-slate-500 mb-2">Birden fazla seçebilirsiniz</p>
+          <div id="msSvc" class="multi-select" data-name="svc" data-placeholder="İşlem seçiniz...">
+            <button type="button" class="ms-toggle form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white text-left flex items-center justify-between gap-2">
+              <span class="ms-label text-slate-400 truncate">İşlem seçiniz...</span>
+              <svg class="ms-chevron w-4 h-4 flex-shrink-0 text-slate-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+            </button>
+            <div class="ms-panel hidden mt-1 border border-slate-300 rounded-xl max-h-56 overflow-auto p-1 bg-white"></div>
+          </div>
+        </div>
+
+        <!-- ARIZA -->
+        <div class="form-section">
+          <h2 class="text-lg font-bold text-navy-900 mb-1">Arıza Belirtileri</h2>
+          <p class="text-xs text-slate-500 mb-2">Bakım için geliyorsanız boş bırakabilirsiniz</p>
+
+          <div class="mb-3">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Belirtiler</label>
+            <div id="msSym" class="multi-select" data-name="sym" data-placeholder="Belirti seçiniz...">
+              <button type="button" class="ms-toggle form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white text-left flex items-center justify-between gap-2">
+                <span class="ms-label text-slate-400 truncate">Belirti seçiniz...</span>
+                <svg class="ms-chevron w-4 h-4 flex-shrink-0 text-slate-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="ms-panel hidden mt-1 border border-slate-300 rounded-xl max-h-56 overflow-auto p-1 bg-white"></div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="block text-sm font-semibold text-slate-700 mb-1.5">Yanan uyarı lambaları</label>
+            <div id="msLamp" class="multi-select" data-name="lamp" data-placeholder="Lamba seçiniz...">
+              <button type="button" class="ms-toggle form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm bg-white text-left flex items-center justify-between gap-2">
+                <span class="ms-label text-slate-400 truncate">Lamba seçiniz...</span>
+                <svg class="ms-chevron w-4 h-4 flex-shrink-0 text-slate-500 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+              </button>
+              <div class="ms-panel hidden mt-1 border border-slate-300 rounded-xl max-h-56 overflow-auto p-1 bg-white"></div>
+            </div>
+          </div>
+
+          <div>
+            <label for="note" class="block text-sm font-semibold text-slate-700 mb-1.5">Şikâyetinizi kendi cümlelerinizle anlatın</label>
+            <textarea id="note" rows="3" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm resize-none" placeholder="Örn: Soğukta ilk çalıştırmada tıkırtı sesi geliyor, ısınınca kesiliyor."></textarea>
+          </div>
+        </div>
+
+        <!-- RANDEVU (sadece tarih) -->
+        <div class="form-section">
+          <h2 class="text-lg font-bold text-navy-900 mb-1">Randevu</h2>
+          <div class="mt-3">
+            <label for="date" class="block text-sm font-semibold text-slate-700 mb-1.5">Uygun olduğunuz gün</label>
+            <input id="date" type="date" class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-sm">
+          </div>
+        </div>
+
+        <!-- KVKK -->
+        <div class="form-section">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" required class="mt-0.5 w-4 h-4 rounded border-slate-300">
+            <span class="text-[11px] leading-relaxed text-slate-600">
+              <a href="#" class="underline hover:text-gold-600">KVKK Aydınlatma Metni</a>'ni okudum; kişisel verilerimin randevu ve servis süreci için işlenmesine onay veriyorum.
+            </span>
+          </label>
+        </div>
+
+        <p id="formError" role="alert" hidden class="text-xs text-red-600 font-semibold"></p>
+
+        <button type="submit" class="btn-wa w-full flex items-center justify-center gap-2.5 text-white font-bold py-3.5 rounded-xl text-sm">
+          <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp ile Gönder
+        </button>
+
+        <div id="successMsg" role="status" hidden class="items-start gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl text-sm">
+          <svg class="w-5 h-5 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Talebiniz alındı ve personelimize iletildi. WhatsApp açıldı.</span>
+        </div>
+      </form>
+    </div>
+
+    <!-- ADRES -->
+    <div class="mt-4 bg-white rounded-2xl shadow-xl overflow-hidden">
+      <div class="p-5">
+        <h3 class="text-base font-bold text-navy-900 mb-3">Dükkânımız</h3>
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3 justify-between">
+          <div class="text-sm text-slate-600">
+            <p class="font-semibold text-navy-900">Cumhuriyet Mahallesi 707. Sokak No: 2</p>
+            <p class="text-xs text-slate-500 mt-0.5">Tel: 0506 034 63 57</p>
+          </div>
+          <a href="https://www.google.com/maps/search/?api=1&query=Kuzey%20Oto%20Cumhuriyet%20Mahallesi%20707.%20Sokak%20No%202" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 btn-gold text-white px-4 py-2.5 rounded-xl font-semibold text-sm whitespace-nowrap">
+            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+            Haritada Aç
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- PIN MODAL -->
+<div id="pinModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-6">
+    <h3 class="text-lg font-bold text-navy-900 mb-1">Personel Girişi</h3>
+    <p class="text-xs text-slate-500 mb-4">Bu alan yalnızca servis personeli içindir.</p>
+    <input type="password" id="staffPinInput" inputmode="numeric" maxlength="8" autocomplete="off"
+           class="form-input w-full px-4 py-3 border border-slate-300 rounded-xl text-center text-lg tracking-[0.5em] font-bold" placeholder="••••">
+    <p id="pinError" class="hidden text-xs text-red-600 mt-2 text-center">Hatalı PIN. Tekrar deneyin.</p>
+    <div class="flex gap-2 mt-4">
+      <button type="button" onclick="closePinModal()" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold text-slate-700 hover:bg-slate-50">İptal</button>
+      <button type="button" onclick="checkStaffPin()" class="flex-1 px-4 py-2.5 rounded-xl btn-gold text-white text-sm font-semibold">Giriş</button>
+    </div>
+  </div>
+</div>
+
+<!-- PERSONEL PANELİ -->
+<div id="staffPanelModal" class="fixed inset-0 z-50 hidden items-start justify-center p-2 sm:p-4 bg-black/50 backdrop-blur-sm overflow-y-auto">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-5xl my-4 sm:my-8">
+    <div class="flex items-center justify-between p-4 sm:p-6 border-b border-slate-200 sticky top-0 bg-white rounded-t-2xl z-10">
+      <div>
+        <h3 class="text-lg font-bold text-navy-900">Servis Personeli Paneli</h3>
+        <p class="text-xs text-slate-500">Bekleyen talebi seçin, fiyat girin, WhatsApp ile müşteriye gönderin.</p>
+      </div>
+      <button type="button" onclick="closeStaffPanel()" class="w-9 h-9 flex items-center justify-center text-slate-500 hover:bg-slate-100 rounded-lg" aria-label="Kapat">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-5">
+      <div class="md:col-span-2 p-4 sm:p-6 border-b md:border-b-0 md:border-r border-slate-200">
+        <div class="flex items-center justify-between mb-3">
+          <h4 class="text-sm font-bold text-slate-700">Bekleyen Talepler</h4>
+          <button type="button" onclick="renderPendingList()" class="text-xs text-slate-500 hover:text-slate-700">↻ Yenile</button>
+        </div>
+        <div id="pendingList" class="max-h-[60vh] overflow-y-auto"></div>
+      </div>
+      <div class="md:col-span-3 p-4 sm:p-6">
+        <div id="noRequestSelected" class="text-center py-12">
+          <svg class="w-12 h-12 mx-auto text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <p class="text-sm text-slate-500">Soldan bir talep seçin.</p>
+        </div>
+        <div id="requestDetail" class="hidden space-y-4">
+          <div id="detailBox" class="bg-slate-50 rounded-xl p-4 space-y-3 text-sm"></div>
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-xs font-semibold text-slate-700">Yapılan İşlemler *</label>
+              <button type="button" onclick="addServiceRow()" class="text-xs font-semibold text-gold-600 hover:text-gold-700 inline-flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" d="M12 4v16m8-8H4"/></svg>İşlem Ekle
+              </button>
+            </div>
+            <div id="serviceRows" class="space-y-2"></div>
+          </div>
+          <div class="flex items-center justify-between bg-gold-50 border border-gold-200 rounded-xl px-4 py-3">
+            <span class="text-sm font-semibold text-slate-700">Toplam Tutar</span>
+            <span class="text-xl font-extrabold text-gold-700"><span id="grandTotal">0,00</span> TL</span>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-700 mb-1">Notlar (opsiyonel)</label>
+            <textarea id="spNotes" rows="2" class="form-input w-full px-3 py-2.5 border border-slate-300 rounded-lg text-sm resize-none" placeholder="Müşteriye iletmek istediğiniz not..."></textarea>
+          </div>
+          <button type="button" onclick="sendStaffReport()" class="btn-wa w-full flex items-center justify-center gap-2.5 text-white font-bold py-3.5 rounded-xl text-sm">
+            <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            WhatsApp ile Müşteriye Gönder
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =================== AYARLAR =================== */
+const CONFIG = {
+  phone: "905060346357",
+  pin: "1234",
+  storageKey: "kuzeyoto_requests_v5"
+};
+
+/* =================== MARKA / MODEL =================== */
+const CAR_DATA = {
+  "Audi": ["A1","A3","A4","A5","A6","A7","A8","Q2","Q3","Q4 e-tron","Q5","Q7","Q8","e-tron","e-tron GT","RS3","RS4","RS5","RS6","RS7","TT"],
+  "BMW": ["1 Serisi","2 Serisi","3 Serisi","4 Serisi","5 Serisi","7 Serisi","8 Serisi","X1","X2","X3","X4","X5","X6","X7","XM","Z4","i3","i4","i5","i7","iX","iX3"],
+  "BYD": ["Atto 3","Dolphin","Han","Seal","Seal U","Tang"],
+  "Chery": ["Omoda 5","Tiggo 5x","Tiggo 7 Pro","Tiggo 8 Pro"],
+  "Citroën": ["2 CV","AX","Berlingo","BX","C-Crosser","C-Elysée","C1","C2","C25","C3","C3 Aircross","C3 Picasso","C4","C4 Aircross","C4 Cactus","C4 Picasso","C4 X","C5","C5 Aircross","C5 X","C6","C8","DS3","DS4","DS5","Elysee","Evasion","Jumper","Jumpy","Nemo","Saxo","Xantia","XM","Xsara","Xsara Picasso","ZX"],
+  "Cupra": ["Ateca","Born","Formentor","Leon","Tavascan","Terramar"],
+  "Dacia": ["Duster","Jogger","Logan","Sandero","Sandero Stepway","Spring","1310","Solenza"],
+  "Fiat": ["124","126","127","131","500","500X","Albea","Brava","Bravo","Doblo","Ducato","Egea","Egea Cross","Fiorino","Linea","Marea","Palio","Panda","Punto","Siena","Stilo","Tempra","Tipo","Uno"],
+  "Ford": ["Capri","C-Max","Courier","Escort","Explorer","Fiesta","Focus","Fusion","Galaxy","Kuga","Mondeo","Mustang","Puma","Ranger","S-Max","Taunus","Tourneo Courier","Tourneo Custom","Transit"],
+  "Honda": ["Accord","City","Civic","CR-V","e:Ny1","HR-V","Jazz","Prelude"],
+  "Hyundai": ["Accent","Atos","Bayon","Elantra","Getz","i10","i20","i30","Ioniq 5","Ioniq 6","Ioniq 9","Kona","Matrix","Santa Fe","Sonata","Tucson"],
+  "Kia": ["Carens","Ceed","Cerato","Clarus","EV3","EV6","EV9","Niro","Picanto","Rio","Sorento","Sportage","Stonic","XCeed"],
+  "Mercedes-Benz": ["A Serisi","B Serisi","C Serisi","E Serisi","S Serisi","CLA","CLS","EQA","EQB","EQC","EQE","EQS","G Serisi","GLA","GLB","GLC","GLE","GLS","Sprinter","Vito"],
+  "MG": ["HS","Marvel R","MG4","MG5","ZS"],
+  "Nissan": ["Almera","Ariya","Juke","Micra","Navara","Note","Primera","Qashqai","Sunny","X-Trail"],
+  "Opel": ["Astra","Corsa","Combo","Crossland","Grandland","Insignia","Kadett","Mokka","Omega","Tigra","Vectra","Vivaro","Zafira"],
+  "Peugeot": ["106","205","206","207","208","2008","301","306","307","308","3008","405","406","407","5008","508","Expert","Partner","Rifter","Traveller"],
+  "Renault": ["9","11","12","19","21","Arkana","Austral","Broadway","Captur","Clio","Duster","Espace","Flash","Fluence","Kangoo","Laguna","Latitude","Master","Megane","Megane E-Tech","Scenic","Symbol","Taliant","Toros","Trafic","Twingo","Zoe"],
+  "Seat": ["Arona","Ateca","Cordoba","Ibiza","Leon","Tarraco","Toledo"],
+  "Skoda": ["Enyaq","Fabia","Favorit","Felicia","Kamiq","Karoq","Kodiaq","Octavia","Scala","Superb"],
+  "Suzuki": ["Across","Jimny","S-Cross","Swift","Vitara"],
+  "TOGG": ["T10F","T10X"],
+  "Toyota": ["Auris","Avensis","bZ4X","Camry","Carina","Celica","Corolla","Corolla Cross","Corolla Verso","C-HR","GR86","Hilux","Land Cruiser","Proace","RAV4","Starlet","Supra","Yaris","Yaris Cross"],
+  "Volkswagen": ["Arteon","Beetle","Bora","Caddy","Golf","ID.3","ID.4","ID.5","ID.7","ID. Buzz","Jetta","Lupo","Multivan","Passat","Polo","Scirocco","Sharan","T-Cross","T-Roc","Taigo","Tiguan","Touareg","Touran","Transporter","Vento"],
+  "Volvo": ["EX30","EX40","EX90","S40","S60","S90","V40","V60","V90","XC40","XC60","XC90"]
+};
+
+/* =================== SEÇENEKLER =================== */
+const FUEL = ["Benzin","Dizel","LPG'li","Hibrit","Elektrik"];
+const GEAR = ["Manuel","Otomatik","Yarı otomatik (DSG/EDC)"];
+const SVC  = ["Periyodik bakım","Yağ ve filtre değişimi","Fren sistemi","Süspansiyon / alt takım","Motor / performans","Arıza tespiti (bilgisayarlı)","Muayene öncesi kontrol","Diğer"];
+const SYM  = ["Tıkırtı / vuruntu sesi","Uğultu / gıcırtı","Titreme / sarsıntı","Yağ / sıvı kaçağı","Motor ısınıyor","Marş basmıyor / çalışmıyor","Çekiş kaybı","Yakıt tüketimi arttı","Direksiyon / yol tutuş sorunu","Fren pedalı sorunu","Vites geçiş sorunu"];
+const LAMP = ["Motor arıza","Yağ basıncı","ABS / ESP","Hava yastığı","Motor sıcaklığı","Lastik basıncı"];
+
+/* =================== YARDIMCILAR =================== */
+const $ = id => document.getElementById(id);
+function escapeHtml(s){return String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function formatPrice(n){return (Number(n)||0).toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function trDate(v){if(!v)return'';const p=v.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric',weekday:'long'});}
+function formatPhone(raw){let d=(raw||'').replace(/\D/g,'');if(d.startsWith('0'))d='90'+d.substring(1);else if(d.length===10)d='90'+d;return d;}
+
+/* =================== SELECT DOLDUR =================== */
+function fillSelect(sel, items) {
+  items.forEach(t => {
+    const o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    sel.appendChild(o);
+  });
+}
+fillSelect($('fuel'), FUEL);
+fillSelect($('gear'), GEAR);
+
+/* =================== ÇOKLU SEÇİM DROPDOWN =================== */
+function makeMultiSelect(wrapperId, name, items) {
+  const wrapper = $(wrapperId);
+  const toggle = wrapper.querySelector('.ms-toggle');
+  const label = wrapper.querySelector('.ms-label');
+  const panel = wrapper.querySelector('.ms-panel');
+  const chevron = wrapper.querySelector('.ms-chevron');
+  const placeholder = wrapper.dataset.placeholder || 'Seçiniz...';
+
+  items.forEach(t => {
+    const lab = document.createElement('label');
+    lab.className = 'flex items-center gap-2 px-2 py-1.5 hover:bg-slate-50 rounded-lg cursor-pointer text-sm select-none';
+    const inp = document.createElement('input');
+    inp.type = 'checkbox'; inp.name = name; inp.value = t;
+    inp.className = 'rounded border-slate-300 text-gold-500 focus:ring-gold-500';
+    lab.appendChild(inp);
+    const span = document.createElement('span');
+    span.textContent = t;
+    lab.appendChild(span);
+    panel.appendChild(lab);
+  });
+
+  toggle.addEventListener('click', e => {
+    e.stopPropagation();
+    document.querySelectorAll('.ms-panel').forEach(p => {
+      if (p !== panel) { p.classList.add('hidden'); p.parentElement.querySelector('.ms-chevron')?.classList.remove('ms-chevron-open'); }
+    });
+    const hidden = panel.classList.toggle('hidden');
+    chevron.classList.toggle('ms-chevron-open', !hidden);
+  });
+
+  panel.addEventListener('click', e => e.stopPropagation());
+  panel.addEventListener('change', update);
+
+  function update() {
+    const checked = [...panel.querySelectorAll('input:checked')].map(i => i.value);
+    if (checked.length === 0) {
+      label.textContent = placeholder;
+      label.classList.add('text-slate-400');
+      label.classList.remove('text-slate-800', 'font-medium');
+    } else {
+      label.textContent = checked.length + ' seçili: ' + checked.join(', ');
+      label.classList.remove('text-slate-400');
+      label.classList.add('text-slate-800', 'font-medium');
+    }
+  }
+}
+
+makeMultiSelect('msSvc', 'svc', SVC);
+makeMultiSelect('msSym', 'sym', SYM);
+makeMultiSelect('msLamp', 'lamp', LAMP);
+
+document.addEventListener('click', () => {
+  document.querySelectorAll('.ms-panel').forEach(p => {
+    p.classList.add('hidden');
+    p.parentElement.querySelector('.ms-chevron')?.classList.remove('ms-chevron-open');
+  });
+});
+
+/* =================== MARKA + YIL =================== */
+const brandSelect = $('brand');
+Object.keys(CAR_DATA).sort().forEach(b => {
+  const o = document.createElement('option'); o.value = b; o.textContent = b; brandSelect.appendChild(o);
+});
+const otherOpt = document.createElement('option'); otherOpt.value = 'Diğer'; otherOpt.textContent = 'Diğer'; brandSelect.appendChild(otherOpt);
+
+for (let y = new Date().getFullYear() + 1; y >= 1985; y--) {
+  const o = document.createElement('option'); o.value = String(y); o.textContent = String(y); $('year').appendChild(o);
+}
+$('date').min = new Date().toISOString().slice(0,10);
+
+/* =================== MODEL KONTROLÜ =================== */
+brandSelect.addEventListener('change', function() {
+  const b = this.value;
+  $('brandOtherBox').hidden = b !== 'Diğer';
+  if (b !== 'Diğer') $('brandOther').value = '';
+
+  const modelSel = $('model');
+  const modelOther = $('modelOther');
+  modelSel.innerHTML = '';
+
+  if (!b) {
+    modelSel.disabled = true;
+    modelSel.hidden = false;
+    modelOther.hidden = true;
+    modelSel.innerHTML = '<option value="">Önce marka seçin</option>';
+    return;
+  }
+  if (b === 'Diğer') {
+    modelSel.disabled = true;
+    modelSel.hidden = true;
+    modelOther.hidden = false;
+    modelOther.value = '';
+    return;
+  }
+  modelOther.hidden = true;
+  modelSel.hidden = false;
+  modelSel.disabled = false;
+  const d = document.createElement('option');
+  d.value = ''; d.textContent = 'Model seçin'; d.selected = true; d.disabled = true;
+  modelSel.appendChild(d);
+  (CAR_DATA[b] || []).forEach(m => {
+    const o = document.createElement('option'); o.value = m; o.textContent = m; modelSel.appendChild(o);
+  });
+});
+
+/* =================== PLAKA / KM =================== */
+$('plate').addEventListener('input', function() {
+  this.value = this.value.toUpperCase().replace(/[^A-Z0-9 ]/g, '');
+});
+$('plate').addEventListener('blur', function() {
+  const s = this.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+  const m = s.match(/^(\d{2})([A-Z]{1,3})(\d{2,4})$/);
+  this.value = m ? `${m[1]} ${m[2]} ${m[3]}` : s;
+});
+$('km').addEventListener('input', function() {
+  const d = this.value.replace(/\D/g,'').slice(0,7);
+  this.value = d ? Number(d).toLocaleString('tr-TR') : '';
+});
+
+/* =================== WHATSAPP =================== */
+function openWhatsApp(phone, message) {
+  const isMobile = /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent);
+  const enc = encodeURIComponent(message);
+  if (isMobile) {
+    const a = document.createElement('a');
+    a.href = `whatsapp://send?${phone ? 'phone=' + phone + '&' : ''}text=${enc}`;
+    a.style.display = 'none';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(() => {
+      if (document.hasFocus()) {
+        window.location.href = phone ? `https://wa.me/${phone}?text=${enc}` : `https://wa.me/?text=${enc}`;
+      }
+    }, 1200);
+  } else {
+    window.open(phone ? `https://wa.me/${phone}?text=${enc}` : `https://wa.me/?text=${enc}`, '_blank');
+  }
+}
+
+$('shareBtn').addEventListener('click', function() {
+  openWhatsApp('', 'Araç servis formu: ' + window.location.href);
+});
+$('callBtn').href = 'tel:+' + CONFIG.phone;
+
+/* =================== DEPO =================== */
+function getRequests(){try{return JSON.parse(localStorage.getItem(CONFIG.storageKey)||'[]');}catch(e){return[];}}
+function saveRequests(a){localStorage.setItem(CONFIG.storageKey, JSON.stringify(a));}
+function addRequest(r){const a=getRequests();a.unshift(r);saveRequests(a);}
+function removeRequest(id){saveRequests(getRequests().filter(r=>r.id!==id));}
+
+/* =================== MULTI-SELECT RESET =================== */
+function resetAllMultiSelects() {
+  document.querySelectorAll('.multi-select').forEach(w => {
+    w.querySelectorAll('input[type="checkbox"]').forEach(i => i.checked = false);
+    const label = w.querySelector('.ms-label');
+    const placeholder = w.dataset.placeholder || 'Seçiniz...';
+    label.textContent = placeholder;
+    label.classList.add('text-slate-400');
+    label.classList.remove('text-slate-800', 'font-medium');
+    w.querySelector('.ms-panel').classList.add('hidden');
+    w.querySelector('.ms-chevron')?.classList.remove('ms-chevron-open');
+  });
+}
+
+/* =================== FORM GÖNDER =================== */
+const form = $('serviceForm');
+const formError = $('formError');
+const successMsg = $('successMsg');
+let successTimer;
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  formError.hidden = true;
+
+  if (!form.checkValidity()) { form.reportValidity(); return; }
+
+  const name = $('name').value.trim();
+  const phone = $('phone').value.trim();
+  const plate = $('plate').value.trim();
+  const brandSel = $('brand').value;
+  const brand = brandSel === 'Diğer' ? $('brandOther').value.trim() : brandSel;
+  const model = $('model').hidden ? $('modelOther').value.trim() : $('model').value;
+  const year = $('year').value;
+  const km = $('km').value.trim();
+  const fuel = $('fuel').value;
+  const gear = $('gear').value;
+  const services = [...document.querySelectorAll('input[name="svc"]:checked')].map(x=>x.value);
+  const symptoms = [...document.querySelectorAll('input[name="sym"]:checked')].map(x=>x.value);
+  const lamps = [...document.querySelectorAll('input[name="lamp"]:checked')].map(x=>x.value);
+  const note = $('note').value.trim();
+  const date = $('date').value;
+
+  if (!services.length && !symptoms.length && !lamps.length && !note) {
+    formError.textContent = 'Lütfen en az bir işlem, belirti veya şikâyet girin.';
+    formError.hidden = false;
+    formError.scrollIntoView({behavior:'smooth', block:'center'});
+    return;
+  }
+
+  const req = {
+    id: Date.now(), createdAt: new Date().toISOString(),
+    name, phone, plate, brand, model, year, km,
+    fuel, gear, services, symptoms, lamps, note, date
+  };
+  addRequest(req);
+
+  const vehicle = [brand, model, year].filter(Boolean).join(' ');
+  const fg = [fuel, gear].filter(Boolean).join(' / ');
+  const parts = [];
+
+  parts.push('🚗 *Yeni Servis Talebi*');
+  parts.push(`👤 ${name}${phone ? ' — ' + phone : ''}`);
+
+  const veh = [];
+  if (plate) veh.push('Plaka: ' + plate);
+  if (vehicle) veh.push('Araç: ' + vehicle);
+  if (fg) veh.push('Yakıt/Vites: ' + fg);
+  if (km) veh.push('Km: ' + km);
+  if (veh.length) parts.push('🚙 *Araç Bilgileri*\n' + veh.join('\n'));
+
+  if (services.length) parts.push('🔧 *İstenen İşlemler*\n' + services.map(s=>'• '+s).join('\n'));
+  if (symptoms.length || lamps.length) {
+    let b = '⚠️ *Arıza Belirtileri*';
+    if (symptoms.length) b += '\n' + symptoms.map(s=>'• '+s).join('\n');
+    if (lamps.length) b += '\nYanan lambalar: ' + lamps.join(', ');
+    parts.push(b);
+  }
+  if (note) parts.push('📝 *Şikâyet*\n' + note);
+  if (date) parts.push('📅 *Randevu*\nTarih: ' + trDate(date));
+
+  parts.push('— Kuzey Oto web sitesi');
+
+  openWhatsApp(CONFIG.phone, parts.join('\n\n'));
+
+  clearTimeout(successTimer);
+  successMsg.hidden = false;
+  successMsg.classList.add('flex');
+  successMsg.scrollIntoView({behavior:'smooth', block:'center'});
+  successTimer = setTimeout(() => { successMsg.hidden = true; successMsg.classList.remove('flex'); }, 8000);
+
+  form.reset();
+  resetAllMultiSelects();
+  $('brandOtherBox').hidden = true;
+  $('model').innerHTML = '<option value="">Önce marka seçin</option>';
+  $('model').disabled = true;
+  $('model').hidden = false;
+  $('modelOther').hidden = true;
+});
+
+/* =================== MODAL =================== */
+function showModal(id){const e=$(id);e.classList.remove('hidden');e.classList.add('flex');}
+function hideModal(id){const e=$(id);e.classList.add('hidden');e.classList.remove('flex');}
+
+/* =================== PERSONEL GİRİŞİ =================== */
+$('staffLoginBtn').addEventListener('click', function(){
+  const inp = $('staffPinInput'); inp.value='';
+  $('pinError').classList.add('hidden');
+  showModal('pinModal');
+  setTimeout(()=>inp.focus(),100);
+});
+function closePinModal(){hideModal('pinModal');}
+$('staffPinInput').addEventListener('keydown', e => {if(e.key==='Enter'){e.preventDefault();checkStaffPin();}});
+function checkStaffPin(){
+  if ($('staffPinInput').value.trim() === CONFIG.pin) {
+    closePinModal(); openStaffPanel();
+  } else {
+    $('pinError').classList.remove('hidden');
+    $('staffPinInput').value = '';
+    $('staffPinInput').focus();
+  }
+}
+
+/* =================== PERSONEL PANELİ =================== */
+let currentRequestId = null;
+
+function openStaffPanel(){
+  currentRequestId = null;
+  $('requestDetail').classList.add('hidden');
+  $('noRequestSelected').classList.remove('hidden');
+  renderPendingList();
+  showModal('staffPanelModal');
+}
+function closeStaffPanel(){hideModal('staffPanelModal');}
+
+function renderPendingList(){
+  const list = $('pendingList');
+  const reqs = getRequests();
+  if (!reqs.length) {
+    list.innerHTML = '<p class="text-sm text-slate-500 text-center py-8">Henüz bekleyen talep yok.<br><span class="text-xs">Müşteri form gönderdiğinde burada listelenir.</span></p>';
+    return;
+  }
+  list.innerHTML = '';
+  reqs.forEach(r => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    const active = r.id === currentRequestId;
+    btn.className = 'w-full text-left p-3 rounded-xl border transition mb-2 ' + (active ? 'border-gold-500 bg-gold-50' : 'border-slate-200 hover:border-gold-400 hover:bg-gold-50');
+    btn.innerHTML =
+      '<div class="flex justify-between items-start gap-2">' +
+      '<div class="min-w-0">' +
+      '<p class="text-sm font-bold text-navy-900 truncate">' + escapeHtml(r.name) + '</p>' +
+      '<p class="text-xs text-slate-500 truncate">' + escapeHtml([r.brand,r.model,r.year].filter(Boolean).join(' ')) + '</p>' +
+      '<p class="text-xs text-slate-500 truncate">' + escapeHtml(r.plate || '') + (r.phone ? ' — ' + escapeHtml(r.phone) : '') + '</p>' +
+      '</div>' +
+      '<span class="text-[10px] text-slate-400 whitespace-nowrap">' + new Date(r.createdAt).toLocaleDateString('tr-TR') + '</span>' +
+      '</div>';
+    btn.addEventListener('click', () => selectRequest(r.id));
+    list.appendChild(btn);
+  });
+}
+
+function selectRequest(id){
+  const req = getRequests().find(r => r.id === id);
+  if (!req) return;
+  currentRequestId = id;
+
+  const veh = [req.brand, req.model, req.year].filter(Boolean).join(' ');
+  const fg = [req.fuel, req.gear].filter(Boolean).join(' / ');
+
+  const box = $('detailBox');
+  const rows = [];
+  rows.push(`<div class="grid grid-cols-2 gap-3">
+    <div><span class="text-slate-500 text-xs">Ad Soyad</span><br><span class="font-semibold">${escapeHtml(req.name)}</span></div>
+    <div><span class="text-slate-500 text-xs">Telefon</span><br><span class="font-semibold">${escapeHtml(req.phone || '-')}</span></div>
+    <div><span class="text-slate-500 text-xs">Plaka</span><br><span class="font-semibold">${escapeHtml(req.plate || '-')}</span></div>
+    <div><span class="text-slate-500 text-xs">Araç</span><br><span class="font-semibold">${escapeHtml(veh || '-')}</span></div>
+    ${req.km ? `<div><span class="text-slate-500 text-xs">Kilometre</span><br><span class="font-semibold">${escapeHtml(req.km)}</span></div>` : ''}
+    ${fg ? `<div class="${req.km ? '' : 'col-span-2'}"><span class="text-slate-500 text-xs">Yakıt / Vites</span><br><span class="font-semibold">${escapeHtml(fg)}</span></div>` : ''}
+  </div>`);
+
+  if (req.services && req.services.length)
+    rows.push(`<div><span class="text-slate-500 text-xs">İstenen İşlemler</span><ul class="list-disc pl-5 mt-1">${req.services.map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ul></div>`);
+  if (req.symptoms && req.symptoms.length)
+    rows.push(`<div><span class="text-slate-500 text-xs">Arıza Belirtileri</span><ul class="list-disc pl-5 mt-1">${req.symptoms.map(s=>`<li>${escapeHtml(s)}</li>`).join('')}</ul></div>`);
+  if (req.lamps && req.lamps.length)
+    rows.push(`<div><span class="text-slate-500 text-xs">Yanan Lambalar</span><p class="font-semibold mt-1">${escapeHtml(req.lamps.join(', '))}</p></div>`);
+  if (req.note)
+    rows.push(`<div><span class="text-slate-500 text-xs">Şikâyet</span><p class="mt-1 whitespace-pre-wrap">${escapeHtml(req.note)}</p></div>`);
+  if (req.date)
+    rows.push(`<div><span class="text-slate-500 text-xs">Randevu</span><p class="font-semibold mt-1">${escapeHtml(trDate(req.date))}</p></div>`);
+
+  box.innerHTML = rows.join('');
+
+  $('serviceRows').innerHTML = '';
+  $('spNotes').value = '';
+  $('grandTotal').textContent = '0,00';
+  addServiceRow();
+
+  $('noRequestSelected').classList.add('hidden');
+  $('requestDetail').classList.remove('hidden');
+  renderPendingList();
+}
+
+function addServiceRow(desc, price) {
+  const container = $('serviceRows');
+  const row = document.createElement('div');
+  row.className = 'service-row flex gap-2 items-center';
+  row.innerHTML =
+    '<input type="text" class="service-desc form-input flex-1 min-w-0 px-3 py-2.5 border border-slate-300 rounded-lg text-sm" placeholder="İşlem açıklaması" value="' + escapeHtml(desc || '') + '">' +
+    '<input type="number" class="service-price form-input w-24 sm:w-28 px-3 py-2.5 border border-slate-300 rounded-lg text-sm text-right" placeholder="0" min="0" step="0.01" value="' + (price || '') + '">' +
+    '<span class="text-xs text-slate-500 font-semibold">TL</span>' +
+    '<button type="button" class="remove-row w-8 h-8 flex-shrink-0 flex items-center justify-center text-red-500 hover:bg-red-50 rounded-lg transition" aria-label="Sil">' +
+      '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>' +
+    '</button>';
+  container.appendChild(row);
+  calculateTotal();
+}
+
+function calculateTotal() {
+  let total = 0;
+  document.querySelectorAll('.service-price').forEach(inp => { total += parseFloat(inp.value) || 0; });
+  $('grandTotal').textContent = formatPrice(total);
+}
+
+$('serviceRows').addEventListener('input', e => {
+  if (e.target.classList.contains('service-price')) calculateTotal();
+});
+$('serviceRows').addEventListener('click', e => {
+  const btn = e.target.closest('.remove-row');
+  if (!btn) return;
+  const row = btn.closest('.service-row');
+  if (!row) return;
+  if (document.querySelectorAll('.service-row').length > 1) row.remove();
+  else {
+    row.querySelector('.service-desc').value = '';
+    row.querySelector('.service-price').value = '';
+  }
+  calculateTotal();
+});
+
+function sendStaffReport() {
+  if (!currentRequestId) { alert('Önce bir talep seçin.'); return; }
+  const req = getRequests().find(r => r.id === currentRequestId);
+  if (!req) { alert('Talep bulunamadı.'); return; }
+
+  const items = [];
+  let total = 0;
+  document.querySelectorAll('.service-row').forEach(row => {
+    const desc = row.querySelector('.service-desc').value.trim();
+    const price = parseFloat(row.querySelector('.service-price').value) || 0;
+    if (desc) {
+      items.push('• ' + desc + ' — ' + formatPrice(price) + ' TL');
+      total += price;
+    }
+  });
+  if (!items.length) { alert('En az bir işlem açıklaması girin.'); return; }
+
+  const notes = $('spNotes').value.trim();
+  const cleanPhone = formatPhone(req.phone);
+  if (!cleanPhone) { alert('Müşterinin telefon numarası kayıtlı değil.'); return; }
+
+  const veh = [req.brand, req.model, req.year].filter(Boolean).join(' ');
+  const lines = [
+    '🚗 *Kuzey Oto — Servis Tamamlama*', '',
+    'Sayın *' + req.name + '*,', '',
+    'Aracınızın servis işlemleri tamamlanmıştır.', '',
+    veh ? '🚙 *Araç:* ' + veh : null,
+    req.plate ? '🔑 *Plaka:* ' + req.plate : null,
+    (veh || req.plate) ? '' : null,
+    '🔧 *Yapılan İşlemler:*',
+    ...items, '',
+    '💰 *Toplam Tutar:* ' + formatPrice(total) + ' TL',
+    notes ? '' : null,
+    notes ? '📝 *Not:* ' + notes : null,
+    '',
+    'Bizi tercih ettiğiniz için teşekkür ederiz.',
+    '— *Kuzey Oto*'
+  ].filter(l => l !== null).join('\n');
+
+  openWhatsApp(cleanPhone, lines);
+
+  setTimeout(() => {
+    if (confirm('Rapor WhatsApp\'ta açıldı.\nTalep tamamlandı olarak işaretlensin mi?')) {
+      removeRequest(req.id);
+      currentRequestId = null;
+      $('requestDetail').classList.add('hidden');
+      $('noRequestSelected').classList.remove('hidden');
+      renderPendingList();
+    }
+  }, 400);
+}
+</script>
+</body>
+</html>
